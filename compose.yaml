@@ -1,0 +1,14 @@
+services:
+  client:
+    build:
+      context: ./
+    develop:
+      watch:
+        - path: ./src
+          action: sync
+          target: /app
+        - path: package.json
+          action: rebuild
+    labels:
+      traefik.http.routers.client.rule: Host(`localhost`)
+      traefik.http.services.client.loadbalancer.server.port: 8080
