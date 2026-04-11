@@ -1,16 +1,22 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconButton } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { CollectConfigurationService } from './services/collect-configuration.service';
+import { TaskService } from './services/task.service';
+import { CollectConfiguration } from './models/orchestration.model';
 
 @Component({
   selector: 'app-orchestration',
-  imports: [],
+  imports: [MatTableModule, MatIconButton, MatIconModule],
   templateUrl: './orchestration.html',
   styleUrl: './orchestration.scss',
 })
-export class Orchestration implements OnInit {
-  private readonly http = inject(HttpClient);
+export class Orchestration {
+  private readonly collectConfigurationService = inject(CollectConfigurationService);
+  readonly taskService = inject(TaskService);
 
-  ngOnInit(): void {
-    this.http.get("http://localhost:8080/api/collect-configuration/all").subscribe(res => console.log(res))
-  }
+  readonly configurations = toSignal(this.collectConfigurationService.getAll(), { initialValue: [] });
+  readonly displayedColumns: (keyof CollectConfiguration | 'actions')[] = ['Id', 'name', 'startDate', 'timespan', 'actions'];
 }

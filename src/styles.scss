@@ -11,11 +11,14 @@ html {
     typography: Roboto,
     density: 0,
   ));
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
 }
 
 body {
   margin: 0;
+  height: 100vh;
   font-family: Roboto, sans-serif;
-  background-color: var(--mat-app-background-color);
-  color: var(--mat-app-on-background);
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
 }

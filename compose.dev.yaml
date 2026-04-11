@@ -2,12 +2,14 @@ services:
   client:
     build:
       context: ./
+      dockerfile: Dockerfile.dev
     develop:
       watch:
         - path: ./src
-          action: rebuild
+          action: sync
+          target: /app/src
         - path: package.json
           action: rebuild
     labels:
       traefik.http.routers.client.rule: Host(`localhost`)
-      traefik.http.services.client.loadbalancer.server.port: 8080
+      traefik.http.services.client.loadbalancer.server.port: 4200

@@ -1,7 +1,7 @@
 # ==================================================
 # Stage 1: build the app
 # ==================================================
-FROM dhi.io/node:24-alpine3.22-dev AS builder
+FROM node:24-alpine AS builder
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ RUN npm run build
 # ==================================================
 # Stage 2: serve the app
 # ==================================================
-FROM dhi.io/nginx:1.28.0-alpine3.21-dev AS runner
+FROM nginx:1.28-alpine AS runner
 
 # Copy nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
