@@ -1,5 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, computed, inject } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,8 +14,24 @@ import { CollectConfiguration } from './models/orchestration.model';
 })
 export class Orchestration {
   private readonly collectConfigurationService = inject(CollectConfigurationService);
-  readonly taskService = inject(TaskService);
+  private readonly taskService = inject(TaskService);
 
-  readonly configurations = toSignal(this.collectConfigurationService.getAll(), { initialValue: [] });
+  readonly collectionConfigurationResource = this.collectConfigurationService.getAll();
+  readonly configurations = computed(() => this.collectionConfigurationResource.value() ?? []);
+
   readonly displayedColumns: (keyof CollectConfiguration | 'actions')[] = ['Id', 'name', 'startDate', 'timespan', 'actions'];
+
+  async onClickOnSchedule(id: string): Promise<void> {
+    await this.taskService.schedule(id);
+    this.collectionConfigurationResource.reload();
+  }
+
+  async onClickOnStopTask(id: string): Promise<void> {
+    await this.taskService.delete(id);
+    this.collectionConfigurationResource.reload();
+  }
+
+  async onClickOnDelete(id: string): Promise<void> {
+    await this.collectConfigurationService.deleteOne(id);
+  }
 }

@@ -4,4 +4,5 @@ export interface CollectConfiguration {
   startDate: string | null;
   /** in hours */
   timespan: number;
+  active: boolean;
 }

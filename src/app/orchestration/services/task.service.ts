@@ -1,18 +1,23 @@
-import { HttpClient } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 
 const CONTROLLER = 'task';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
-    private readonly http = inject(HttpClient);
 
-    schedule(configId: string): void {
-        this.http.post(`${environment.apiUrl}/api/${CONTROLLER}`, { collectConfigId: configId });
+    async schedule(configId: string): Promise<void> {
+        return fetch(`${environment.apiUrl}/api/${CONTROLLER}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ collectConfigId: configId })
+        }).then(() => void 0);
     }
 
-    delete(configId: string): void {
-        this.http.delete(`${environment.apiUrl}/api/${CONTROLLER}/${configId}`);
+    async delete(configId: string): Promise<void> {
+        return fetch(`${environment.apiUrl}/api/${CONTROLLER}/${configId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+        }).then(() => void 0);
     }
 }

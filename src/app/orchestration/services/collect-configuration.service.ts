@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { httpResource } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { CollectConfiguration } from '../models/orchestration.model';
 
@@ -9,9 +8,12 @@ const GET_ALL = 'all';
 
 @Injectable({ providedIn: 'root' })
 export class CollectConfigurationService {
-  private readonly http = inject(HttpClient);
 
-  getAll(): Observable<CollectConfiguration[]> {
-    return this.http.get<CollectConfiguration[]>(`${environment.apiUrl}/api/${CONTROLLER}/${GET_ALL}`);
+  getAll() {
+    return httpResource<CollectConfiguration[]>(() => `${environment.apiUrl}/api/${CONTROLLER}/${GET_ALL}`);
+  }
+
+  async deleteOne(id: string): Promise<void> {
+    await fetch(`${environment.apiUrl}/api/${CONTROLLER}/${id}`, { method: 'DELETE' });
   }
 }
