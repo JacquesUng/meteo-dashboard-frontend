@@ -8,6 +8,8 @@ import { CollectConfiguration } from './models/orchestration.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreateCollectConfigurationDialog } from './create-collect-configuration-dialog/create-collect-configuration-dialog';
+import { ConfirmDeleteDialog } from './confirm-delete-dialog/confirm-delete-dialog';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-orchestration',
@@ -36,18 +38,20 @@ export class Orchestration {
   }
 
   async onClickOnDelete(id: string): Promise<void> {
+    const confirmed = await firstValueFrom(
+      this.dialog.open(ConfirmDeleteDialog, { disableClose: true }).afterClosed()
+    );
+    if (!confirmed) return;
     await this.collectConfigurationService.deleteOne(id);
     this.collectionConfigurationResource.reload();
   }
 
-  onClickOnCreate(): void {
-    this.dialog.open(CreateCollectConfigurationDialog, { disableClose: true }).afterClosed().subscribe({
-      next: (result: CollectConfiguration) => {
-        if (result) {
-          this.collectConfigurationService.createOne(result);
-          this.collectionConfigurationResource.reload();
-        }
-      }
-    });
+  async onClickOnCreate(): Promise<void> {
+    const result = await firstValueFrom(
+      this.dialog.open(CreateCollectConfigurationDialog, { disableClose: true }).afterClosed()
+    );
+    if (!result) return;
+    await this.collectConfigurationService.createOne(result);
+    this.collectionConfigurationResource.reload();
   }
 }
