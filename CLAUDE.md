@@ -19,6 +19,10 @@ ng test         # Run unit tests (Vitest)
 ng generate component <name>
 ```
 
+## Design
+
+See [DESIGN.md](DESIGN.md) for UI and design guidelines.
+
 ## Conventions
 
 - Standalone components (no NgModules)

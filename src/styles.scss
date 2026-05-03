@@ -22,3 +22,13 @@ body {
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
 }
+
+.page-content {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: var(--mat-sys-surface-container-highest) !important;
+}
